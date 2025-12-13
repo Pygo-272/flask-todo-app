@@ -38,8 +38,10 @@ app.secret_key = os.environ.get('FLASK_SECRET', 'dev-secret-key-change-me')
 
 # By default connect to local XAMPP MySQL. Override with DATABASE_URL env var if needed.
 # Example default: 'mysql+pymysql://root:@localhost/todo_db'
-DEFAULT_DB_URI = os.environ.get('DATABASE_URL', 'mysql+pymysql://root:@localhost/todo_db')
-app.config['SQLALCHEMY_DATABASE_URI'] = DEFAULT_DB_URI
+DB_URI = os.environ.get('DATABASE_URL', 'mysql+pymysql://root:@localhost/todo_db')
+if DB_URI.startswith("postgres://"):
+    DATABASE_URL = DB_URI.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] =DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
